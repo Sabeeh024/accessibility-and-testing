@@ -4,6 +4,19 @@ main {
   padding: 0 20px;
 }
 
+/* Visible to screen readers, removed from visual layout and never focusable */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .tag-picker {
   position: relative;
   display: inline-block;

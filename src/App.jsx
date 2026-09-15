@@ -5,11 +5,14 @@ import TagPicker from './TagPicker'
 function App() {
   const [tags, setTags] = useState(['react', 'testing'])
   const [favorites, setFavorites] = useState(new Set())
+  const [announcement, setAnnouncement] = useState('')
   const addButtonRef = useRef(null)
   const removeButtonRefs = useRef(new Map())
 
   function addTag(tag) {
-    setTags((prev) => (prev.includes(tag) ? prev : [...prev, tag]))
+    if (tags.includes(tag)) return
+    setTags((prev) => [...prev, tag])
+    setAnnouncement(`${tag} added.`)
   }
 
   function toggleFavorite(tag) {
@@ -24,6 +27,7 @@ function App() {
   function removeTag(tag) {
     const index = tags.indexOf(tag)
     setTags((prev) => prev.filter((t) => t !== tag))
+    setAnnouncement(`${tag} removed.`)
 
     // Move focus to the next tag's remove button, or the previous one, or
     // back to Add if the list is now empty — never leave focus to fall
@@ -42,6 +46,9 @@ function App() {
   return (
     <main>
       <h1>Tag picker — custom</h1>
+      <div className="visually-hidden" role="status" aria-live="polite">
+        {announcement}
+      </div>
       <TagPicker onAdd={addTag} addButtonRef={addButtonRef} />
       <ul className="selected-tags">
         {tags.map((tag) => {
