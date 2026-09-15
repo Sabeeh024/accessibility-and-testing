@@ -1,6 +1,7 @@
 import { cleanup } from '@testing-library/react'
 import '@testing-library/jest-dom/vitest'
-import { afterEach } from 'vitest'
+import { afterAll, afterEach, beforeAll } from 'vitest'
+import { server } from './server'
 
 // Without this, each test's rendered DOM stays mounted for the next test —
 // confirmed by running this suite without it first: queries started
@@ -10,3 +11,7 @@ import { afterEach } from 'vitest'
 afterEach(() => {
   cleanup()
 })
+
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
+afterEach(() => server.resetHandlers())
+afterAll(() => server.close())
