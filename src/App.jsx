@@ -1,8 +1,10 @@
+import QuantityStepper from './QuantityStepper'
+
 function App() {
   return (
     <main>
-      <h1>Accessibility &amp; Testing scaffold</h1>
-      <p>Pristine base for topic branches. See NOTES/ on master for the curriculum.</p>
+      <h1>Quantity stepper</h1>
+      <QuantityStepper />
     </main>
   )
 }
