@@ -32,3 +32,18 @@ main {
 .tag-picker-option--active {
   background: rgba(128, 128, 128, 0.2);
 }
+
+.selected-tags {
+  list-style: none;
+  padding: 0;
+  margin: 40px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.selected-tags li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

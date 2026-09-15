@@ -13,7 +13,7 @@ const TAGS = [
   'security',
 ]
 
-function TagPicker() {
+function TagPicker({ onAdd, addButtonRef }) {
   const [value, setValue] = useState('')
   const [open, setOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
@@ -39,6 +39,13 @@ function TagPicker() {
     const tag = filtered[index]
     if (!tag) return
     setValue(tag)
+    closeList()
+  }
+
+  function handleAdd() {
+    if (!value.trim()) return
+    onAdd(value.trim())
+    setValue('')
     closeList()
   }
 
@@ -115,6 +122,9 @@ function TagPicker() {
         onBlur={closeList}
         onKeyDown={handleKeyDown}
       />
+      <button type="button" ref={addButtonRef} onClick={handleAdd}>
+        Add
+      </button>
       {open && filtered.length > 0 && (
         <ul id={listId} role="listbox" className="tag-picker-list">
           {filtered.map((tag, index) => (
