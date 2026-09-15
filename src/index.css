@@ -1,6 +1,7 @@
 :root {
   --text: #1f2933;
   --bg: #ffffff;
+  --error: #b3261e;
   font: 16px/1.5 system-ui, 'Segoe UI', Roboto, sans-serif;
   color-scheme: light dark;
   color: var(--text);
@@ -11,6 +12,8 @@
   :root {
     --text: #e5e7eb;
     --bg: #16171d;
+    /* #b3261e is only 2.74:1 on this background — fails WCAG AA (4.5:1) */
+    --error: #ff8a80;
   }
 }
 

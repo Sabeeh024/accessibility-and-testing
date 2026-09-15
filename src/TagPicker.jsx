@@ -17,7 +17,9 @@ function TagPicker({ onAdd, addButtonRef }) {
   const [value, setValue] = useState('')
   const [open, setOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
+  const [error, setError] = useState('')
   const listId = useId()
+  const errorId = useId()
   const inputRef = useRef(null)
 
   const filtered = TAGS.filter((tag) =>
@@ -43,7 +45,11 @@ function TagPicker({ onAdd, addButtonRef }) {
   }
 
   function handleAdd() {
-    if (!value.trim()) return
+    if (!value.trim()) {
+      setError('Enter a tag before adding.')
+      return
+    }
+    setError('')
     onAdd(value.trim())
     setValue('')
     closeList()
@@ -116,15 +122,34 @@ function TagPicker({ onAdd, addButtonRef }) {
         onChange={(e) => {
           setValue(e.target.value)
           setActiveIndex(-1)
+          setError('')
           openList()
         }}
         onFocus={openList}
         onBlur={closeList}
         onKeyDown={handleKeyDown}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? errorId : undefined}
       />
       <button type="button" ref={addButtonRef} onClick={handleAdd}>
         Add
       </button>
+      {error && (
+        <p id={errorId} role="alert" className="field-error">
+          <svg
+            className="field-error-icon"
+            viewBox="0 0 16 16"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              fill="currentColor"
+              d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm.75 3v5h-1.5V4h1.5Zm0 6.5v1.5h-1.5v-1.5h1.5Z"
+            />
+          </svg>
+          {error}
+        </p>
+      )}
       {open && filtered.length > 0 && (
         <ul id={listId} role="listbox" className="tag-picker-list">
           {filtered.map((tag, index) => (

@@ -47,3 +47,38 @@ main {
   align-items: center;
   gap: 8px;
 }
+
+.tag-bullet {
+  width: 8px;
+  height: 8px;
+  color: #6b6375;
+  flex-shrink: 0;
+}
+
+.icon-button {
+  font-size: 18px;
+  line-height: 1;
+  background: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.icon-button[aria-pressed='true'] {
+  /* filled star + border, not color alone, marks the pressed state */
+  border-color: currentColor;
+}
+
+.field-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--error);
+  margin: 6px 0 0;
+}
+
+.field-error-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}

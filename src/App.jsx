@@ -4,11 +4,21 @@ import TagPicker from './TagPicker'
 
 function App() {
   const [tags, setTags] = useState(['react', 'testing'])
+  const [favorites, setFavorites] = useState(new Set())
   const addButtonRef = useRef(null)
   const removeButtonRefs = useRef(new Map())
 
   function addTag(tag) {
     setTags((prev) => (prev.includes(tag) ? prev : [...prev, tag]))
+  }
+
+  function toggleFavorite(tag) {
+    setFavorites((prev) => {
+      const next = new Set(prev)
+      if (next.has(tag)) next.delete(tag)
+      else next.add(tag)
+      return next
+    })
   }
 
   function removeTag(tag) {
@@ -34,21 +44,44 @@ function App() {
       <h1>Tag picker — custom</h1>
       <TagPicker onAdd={addTag} addButtonRef={addButtonRef} />
       <ul className="selected-tags">
-        {tags.map((tag) => (
-          <li key={tag}>
-            {tag}
-            <button
-              type="button"
-              ref={(el) => {
-                if (el) removeButtonRefs.current.set(tag, el)
-                else removeButtonRefs.current.delete(tag)
-              }}
-              onClick={() => removeTag(tag)}
-            >
-              Remove {tag}
-            </button>
-          </li>
-        ))}
+        {tags.map((tag) => {
+          const isFavorite = favorites.has(tag)
+          return (
+            <li key={tag}>
+              {/* decorative — the tag's own text already conveys "this is a tag" */}
+              <svg
+                className="tag-bullet"
+                viewBox="0 0 8 8"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <circle cx="4" cy="4" r="4" fill="currentColor" />
+              </svg>
+              {tag}
+              <button
+                type="button"
+                className="icon-button"
+                aria-pressed={isFavorite}
+                aria-label={
+                  isFavorite ? `Unfavorite ${tag}` : `Favorite ${tag}`
+                }
+                onClick={() => toggleFavorite(tag)}
+              >
+                {isFavorite ? '★' : '☆'}
+              </button>
+              <button
+                type="button"
+                ref={(el) => {
+                  if (el) removeButtonRefs.current.set(tag, el)
+                  else removeButtonRefs.current.delete(tag)
+                }}
+                onClick={() => removeTag(tag)}
+              >
+                Remove {tag}
+              </button>
+            </li>
+          )
+        })}
       </ul>
     </main>
   )
