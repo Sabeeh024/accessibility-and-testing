@@ -3,3 +3,28 @@ main {
   margin: 48px auto;
   padding: 0 20px;
 }
+
+.tag-picker {
+  position: relative;
+  display: inline-block;
+}
+
+.tag-picker-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border: 1px solid #888;
+  background: Canvas;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.tag-picker-option {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.tag-picker-option:hover {
+  background: rgba(128, 128, 128, 0.2);
+}

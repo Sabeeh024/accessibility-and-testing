@@ -1,8 +1,10 @@
+import TagPicker from './TagPicker'
+
 function App() {
   return (
     <main>
-      <h1>Accessibility &amp; Testing scaffold</h1>
-      <p>Pristine base for topic branches. See NOTES/ on master for the curriculum.</p>
+      <h1>Tag picker — custom</h1>
+      <TagPicker />
     </main>
   )
 }
