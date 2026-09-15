@@ -1,21 +1,24 @@
 # 01 — Semantic HTML vs ARIA-heavy divs
 
-Same widget — a tag-picker combobox — built two ways. Each lives on its own
-git branch off `master` (the pristine scaffold).
-
-| | branch |
-|---|---|
-| Native-first (input + datalist) | `widget/native` |
-| Custom (div/ul + full ARIA) | `widget/custom` |
+Same widget — a tag-picker combobox — built two ways, both on one branch
+off `master` (the pristine scaffold): the native version as an unwired
+reference file (`src/TagPicker.native.jsx`), and the custom ARIA version
+as the live implementation (`src/TagPicker.jsx`) that the rest of the
+accessibility track builds on.
 
 ```bash
-git switch widget/native      # or widget/custom
+git switch topic/01-semantic-html-vs-aria
 npm run dev
 ```
 
+To see the native version rendered instead of the custom one, swap the
+import in `src/App.jsx` from `./TagPicker` to `./TagPicker.native` — it's
+kept deliberately unwired so the custom widget stays what topics 02–04
+build on without the two competing for the same `App.jsx`.
+
 ---
 
-## Native-first (`widget/native`)
+## Native-first (`src/TagPicker.native.jsx`)
 
 A single `<input list="tag-options">` wired to a `<datalist>` of options.
 That's the entire implementation — no state, no keyboard handlers, no ARIA
@@ -36,7 +39,7 @@ handling, filtering-as-you-type, and screen reader announcement for free.
 - Filtering behavior (substring vs prefix, case sensitivity) is entirely
   browser-dependent and not something you control.
 
-## Custom (`widget/custom`)
+## Custom (`src/TagPicker.jsx`)
 
 A `role="combobox"` input controlling a `role="listbox"` of `role="option"`
 elements, with `aria-activedescendant` for virtual focus and hand-written
@@ -73,7 +76,7 @@ even loaded before chasing the "real" problem.
 **Where's the actual line for "just use native"?** The native widget above
 covers "select one value, no custom rendering." The moment you need option
 descriptions, icons, or multi-select, native form controls stop being
-sufficient and you're into `widget/custom` territory — but that line is a
+sufficient and you're into custom-ARIA territory — but that line is a
 judgment call, not a hard rule. Worth revisiting once a widget with a real
 need for custom rendering comes up.
 
