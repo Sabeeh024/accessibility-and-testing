@@ -1,3 +1,4 @@
+import './App.css'
 import TagPicker from './TagPicker'
 
 function App() {

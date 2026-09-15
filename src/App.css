@@ -14,6 +14,9 @@ main {
   top: 100%;
   left: 0;
   right: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
   border: 1px solid #888;
   background: Canvas;
   max-height: 200px;
@@ -25,6 +28,7 @@ main {
   cursor: pointer;
 }
 
-.tag-picker-option:hover {
+.tag-picker-option:hover,
+.tag-picker-option--active {
   background: rgba(128, 128, 128, 0.2);
 }
