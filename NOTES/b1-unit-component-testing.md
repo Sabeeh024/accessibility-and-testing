@@ -50,36 +50,41 @@ npm run test:watch
    arrived at independently from the testing side rather than the a11y
    side.
 
-4. **Real jsdom-vs-browser discrepancy found.** The test suite queries
-   the quantity field with `getByRole('spinbutton', ...)`, and it passes
-   under jsdom. But rendering the same component in an actual browser and
-   reading its live accessibility tree reported the same
-   `<input type="number">` as role **`textbox`**, not `spinbutton`.
-   Confirmed by checking twice, not a one-off. This wasn't chased down to
-   a root cause (jsdom's accessibility-tree emulation vs. this specific
-   browser's implementation of the HTML-AAM role mapping could each be
-   read as "wrong" here), but the practical lesson is what matters:
-   **a passing jsdom-based role query is not proof of what a real screen
-   reader sees** — the same caveat Track A's screen-reader-smoke-test
-   topic already landed on from the manual-testing side. Two different
-   tracks, two independent paths, same conclusion.
+4. **Correction (see [B3](b3-e2e-smoke-test.md)): the apparent
+   jsdom-vs-browser discrepancy originally logged here did not hold up.**
+   The original claim was that a real browser reported this
+   `<input type="number">` as role `textbox` rather than `spinbutton`,
+   based on reading the accessibility tree through the Claude Browser MCP
+   tool. In B3, the exact same element was queried with
+   `getByRole('spinbutton', ...)` through Playwright driving real
+   Chromium via CDP — the more authoritative check, since it's the
+   browser's actual accessibility tree, not a second tool's snapshot of
+   it — and it matched without issue. So the original finding was most
+   likely a quirk of that specific MCP tool's own accessibility-snapshot
+   abstraction, not a genuine jsdom-vs-Chromium disagreement. Left here
+   rather than silently deleted, because getting caught out by a claim
+   that doesn't survive a second, better check is itself the "verify,
+   don't assume" lesson this whole project keeps returning to — including
+   when the thing being re-checked is this project's own earlier NOTES.
 
 ## Next questions this raises
 
-**Should component tests ever assert on ARIA roles that jsdom and real
-browsers disagree on?** The test still passed and still gives real
-regression protection (it did catch the deliberately-introduced bug just
-as reliably) — but if jsdom's role computation for a given element type
-is known to diverge from browsers, is `getByRole` here giving false
-confidence about accessibility specifically, even while giving genuine
-confidence about behavior? Worth revisiting once more component tests
-exist across a range of element types.
+**Now that the jsdom-vs-browser role discrepancy didn't hold up, is
+there still a real gap between jsdom and browser accessibility trees
+worth watching for, or was this specific worry a false alarm?** Only one
+element type (a number input) was checked, and only re-checked with one
+better tool. A genuine jsdom/Chromium divergence might still exist
+elsewhere (custom ARIA widgets seem more likely candidates than native
+form controls) — this doesn't rule that out, it just rules out this
+particular example.
 
 **How does this connect back to Track A's "automated tools are a floor,
-not a ceiling" habit?** ([NOTES/05](05-accessibility-practices.md)) —
-this finding extends that same caution to component-testing tools
-specifically, not just axe/Lighthouse-style scanners: jsdom is also an
-automated proxy for a real browser/AT, with its own gaps.
+not a ceiling" habit?** ([NOTES/05](05-accessibility-practices.md)) — the
+underlying caution still holds even though this specific example didn't:
+any single tool's accessibility snapshot (jsdom's, or a given MCP
+browser's) is a proxy, and proxies can be wrong in either direction — not
+strict enough, or, as happened here, wrongly flagging a problem that
+isn't real.
 
 **What's the right amount of `userEvent` realism to rely on?** The
 "types 99, gets clamped to 5" test relies on `userEvent.type` firing one
