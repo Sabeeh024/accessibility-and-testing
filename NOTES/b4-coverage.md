@@ -73,6 +73,36 @@ These come up often enough to name, without earning a full topic:
   flaky test silently trained to be ignored is worse than no test, since
   it still shows green and still consumes CI time.
 
+## Concepts worth naming (theory, kept brief on purpose)
+
+Track B applied these throughout without ever naming them directly:
+
+- **Test doubles aren't all the same thing.** A **stub** returns
+  canned data (the `fetchUser.mockResolvedValue(...)` in
+  [B2](b2-mocking-integration.md)'s bad-mock example). A **mock**
+  additionally asserts it was *called* a certain way. A **spy** wraps a
+  real implementation while still recording calls. A **fake** is a
+  working-but-simplified real implementation (MSW's mocked server is
+  closer to this — it's a real HTTP layer, just not the real backend).
+  B2's whole lesson was really about *which kind* of double to reach for
+  at a network boundary, without ever using this vocabulary explicitly.
+
+- **The "testing trophy," not the pyramid.** The classic pyramid says
+  "mostly unit tests, few E2E tests." Kent C. Dodds' trophy (widely used
+  for UI-heavy apps) instead weights toward integration tests as the
+  best value per test — which is roughly the shape Track B ended up
+  taking on its own: one unit-test file, one deep integration example
+  (B2), one deliberately minimal E2E test (B3), not a large suite of
+  either.
+
+- **Coverage measures reachability, not correctness.** Stated formally,
+  now that B4 demonstrated it concretely: statement/branch/line coverage
+  answers "did this code run during the tests," never "was its output
+  checked." The only tool that answers the second question is mutation
+  testing (see the brief mention above) — coverage numbers should be
+  read as a *lower bound on untested code*, never as a *measure of test
+  quality*.
+
 ## Where this leaves Track B
 
 This is the end of the testing track for this project — B1 (unit +
